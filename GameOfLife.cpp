@@ -6,28 +6,45 @@
 #include "Const.h"
 using namespace std;
 
+//BUT : Tracer une ligne diagonale en travers de la fenêtre
+//ENTREE : Utilisateur lance l'application
+//SORTIE : Une ligne rouge est tracé
+
+void Setup();
+int nbPoints;
+
+
 int main(int argc, char* argv[])
 {
-	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
-	{
-		cout << "SDL initialization failed. SDL Error: " << SDL_GetError();
-	}
-	else
-	{
-		cout << "SDL initialization succeeded!";
-	}
+	Setup();
 
-	cin.get();
-	return 0;
+	SDL_Event event;
+	SDL_Renderer* renderer;
+	SDL_Window* window;
+	int i;
+
+	SDL_Init(SDL_INIT_VIDEO);
+	SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_WIDTH, 0, &window, &renderer);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+	SDL_RenderClear(renderer);
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+	//SDL_RenderDrawPoints(renderer, , nbPoints);
+	for (i = 0; i < WINDOW_WIDTH; ++i) //Set coordinates of points
+		SDL_RenderDrawPoint(renderer, i, i);
+	SDL_RenderPresent(renderer);
+	while (1) {
+		if (SDL_PollEvent(&event) && event.type == SDL_QUIT)
+			break;
+	}
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	SDL_Quit();
+	return EXIT_SUCCESS;
 }
 
-// Exécuter le programme : Ctrl+F5 ou menu Déboguer > Exécuter sans débogage
-// Déboguer le programme : F5 ou menu Déboguer > Démarrer le débogage
 
-// Conseils pour bien démarrer : 
-//   1. Utilisez la fenêtre Explorateur de solutions pour ajouter des fichiers et les gérer.
-//   2. Utilisez la fenêtre Team Explorer pour vous connecter au contrôle de code source.
-//   3. Utilisez la fenêtre Sortie pour voir la sortie de la génération et d'autres messages.
-//   4. Utilisez la fenêtre Liste d'erreurs pour voir les erreurs.
-//   5. Accédez à Projet > Ajouter un nouvel élément pour créer des fichiers de code, ou à Projet > Ajouter un élément existant pour ajouter des fichiers de code existants au projet.
-//   6. Pour rouvrir ce projet plus tard, accédez à Fichier > Ouvrir > Projet et sélectionnez le fichier .sln.
+void Setup() 
+{
+	cout << "ENTER NUMBER OF POINTS : " << endl;
+	cin >> nbPoints;
+}
